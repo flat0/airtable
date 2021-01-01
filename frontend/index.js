@@ -1,9 +1,5 @@
+// 2021-01-02 https://airtable.com/developers/apps/guides/hello-world-tutorial
 import {initializeBlock} from '@airtable/blocks/ui';
 import React from 'react';
-
-function HelloWorldApp() {
-    // YOUR CODE GOES HERE
-    return <div>Hello world 🚀</div>;
-}
-
+function HelloWorldApp() {return <div>A test Airtable app</div>;}
 initializeBlock(() => <HelloWorldApp />);
