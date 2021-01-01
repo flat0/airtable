@@ -8,10 +8,12 @@ function Main() {
 	const base = useBase();
 	const table = base.getTableByName('Tasks');
 	const records = useRecords(table);
+	const tasks = records.map(r => {return (<div key={r.id}>{r.name || 'Unnamed record'}</div>);});
 	return (
 		<div>
 			<div>{base.name} 2</div>
 			<div>Number of tasks: {records.length}</div>
+			<div>{tasks}</div>
 		</div>
 	);
 }
