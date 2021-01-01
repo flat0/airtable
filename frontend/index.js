@@ -8,6 +8,10 @@ function Main() {
 	const base = useBase();
 	const table = base.getTableByName('Tasks');
 	const records = useRecords(table);
+	// 2021-01-02
+	// 1) «Since we're rendering a list, we include a unique key for each element by using the record's ID»:
+	// https://airtable.com/developers/apps/guides/to-do-list-tutorial#showing-the-name-of-the-records
+	// 2) «Lists and Keys»: https://reactjs.org/docs/lists-and-keys.html
 	const tasks = records.map(r => {return (<div key={r.id}>{r.name || 'Unnamed record'}</div>);});
 	return (
 		<div>
