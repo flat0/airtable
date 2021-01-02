@@ -31,6 +31,10 @@ function Main() {
 		<div>
 			<div>{base.name} 2</div>
 			<div>Number of tasks: {!records ? 0 : records.length}</div>
+{/* 2020-01-02
+«The TablePicker component has a sibling component called TablePickerSynced
+which automatically reads and writes to globalConfig with the proper permission checks»:
+https://airtable.com/developers/apps/guides/to-do-list-tutorial#permissions */}
 			<TablePickerSynced globalConfigKey='selectedTableId' />
 			<div>{tasks}</div>
 		</div>
@@ -52,6 +56,7 @@ function Task({r}) {return (
 		}}
 	>
 		{r.name || 'Unnamed record'}
+{/* 2020-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#expanding-records */}
 		<TextButton aria-label='Expand record' icon='expand' onClick={() => {expandRecord(r);}} variant='dark'/>
 	</div>
 );}
