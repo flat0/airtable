@@ -67,6 +67,7 @@ function Task({r, completedFieldId}) {
 				,padding: 12
 			}}
 		>
+			{/* 2020-01-03 https://airtable.com/developers/apps/guides/to-do-list-tutorial#tracking-completed-tasks */}
 			{!completedFieldId ? null : (r.getCellValue(completedFieldId) ? <s>{label}</s> : label)}
 			{/* 2020-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#expanding-records */}
 			<TextButton aria-label='Expand record' icon='expand' onClick={() => {expandRecord(r);}} variant='dark'/>
