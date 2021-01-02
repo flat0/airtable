@@ -4,7 +4,12 @@
 import {
 	expandRecord // 2021-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#expanding-records
 	,initializeBlock
-	,TablePicker // 2021-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#storing-the-selected-table-in-state
+	// 2021-01-02
+	// 1) https://airtable.com/developers/apps/guides/to-do-list-tutorial#storing-the-selected-table-in-state
+	// 2) «The TablePicker component has a sibling component called TablePickerSynced
+	// which automatically reads and writes to globalConfig with the proper permission checks»:
+	// https://airtable.com/developers/apps/guides/to-do-list-tutorial#permissions
+	,TablePickerSynced
 	,TextButton // 2021-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#expanding-records
 	,useBase // 2021-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#part-1
 	,useGlobalConfig // 2021-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#storing-configuration
@@ -26,7 +31,7 @@ function Main() {
 		<div>
 			<div>{base.name} 2</div>
 			<div>Number of tasks: {!records ? 0 : records.length}</div>
-			<TablePicker onChange={t => {globalConfig.setAsync('selectedTableId', t.id);}} table={table}/>
+			<TablePickerSynced globalConfigKey='selectedTableId' />
 			<div>{tasks}</div>
 		</div>
 	);
