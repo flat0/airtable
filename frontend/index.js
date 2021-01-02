@@ -3,6 +3,7 @@
 // 2) https://airtable.com/developers/apps/guides/to-do-list-tutorial
 import {
 	expandRecord // 2021-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#expanding-records
+	,FieldPickerSynced // 2021-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#tracking-completed-tasks
 	,initializeBlock
 	// 2021-01-02
 	// 1) https://airtable.com/developers/apps/guides/to-do-list-tutorial#storing-the-selected-table-in-state
@@ -23,10 +24,18 @@ function Main() {
 	// 2021-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#storing-configuration
 	const globalConfig = useGlobalConfig();
 	// 2021-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#using-table-id-instead-of-table-name
-	const tableId = globalConfig.get('selectedTableId');
-	const table = base.getTableByIdIfExists(tableId);
-	const records = useRecords(table);
-	const tasks = !records ? null : records.map(r => {return <Task key={r.id} r={r} />});
+	/** @const {?Object} */ const table = base.getTableByIdIfExists(globalConfig.get('selectedTableId'));
+	// 2021-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#tracking-completed-tasks
+	/** @const {?String} */ const completedFieldId = globalConfig.get('completedFieldId');
+	let completedField, records, tasks;
+	if (!table) {
+		[completedField, records, tasks] = [null, null, null];
+	}
+	else {
+		completedField = !completedFieldId ? null : table.getFieldByIdIfExists(completedFieldId);
+		records = useRecords(table);
+		tasks = records.map(r => {return <Task key={r.id} r={r} completedFieldId={completedFieldId}/>});
+	}
 	return (
 		<div>
 			<div>{base.name} 2</div>
@@ -36,6 +45,7 @@ function Main() {
 which automatically reads and writes to globalConfig with the proper permission checks»:
 https://airtable.com/developers/apps/guides/to-do-list-tutorial#permissions */}
 			<TablePickerSynced globalConfigKey='selectedTableId' />
+			<FieldPickerSynced table={table} globalConfigKey='completedFieldId' />
 			<div>{tasks}</div>
 		</div>
 	);
@@ -44,20 +54,23 @@ https://airtable.com/developers/apps/guides/to-do-list-tutorial#permissions */}
 // 1) «Since we're rendering a list, we include a unique key for each element by using the record's ID»:
 // https://airtable.com/developers/apps/guides/to-do-list-tutorial#showing-the-name-of-the-records
 // 2) «Lists and Keys»: https://reactjs.org/docs/lists-and-keys.html
-function Task({r}) {return (
-	<div
-		style={{
-			alignItems: 'center'
-			,borderBottom: '1px solid #ddd'
-			,display: 'flex'
-			,fontSize: 18
-			,justifyContent: 'space-between'
-			,padding: 12
-		}}
-	>
-		{r.name || 'Unnamed record'}
-{/* 2020-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#expanding-records */}
-		<TextButton aria-label='Expand record' icon='expand' onClick={() => {expandRecord(r);}} variant='dark'/>
-	</div>
-);}
+function Task({r, completedFieldId}) {
+	const label = r.name || 'Unnamed record';
+	return (
+		<div
+			style={{
+				alignItems: 'center'
+				,borderBottom: '1px solid #ddd'
+				,display: 'flex'
+				,fontSize: 18
+				,justifyContent: 'space-between'
+				,padding: 12
+			}}
+		>
+			{!completedFieldId ? null : (r.getCellValue(completedFieldId) ? <s>{label}</s> : label)}
+			{/* 2020-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#expanding-records */}
+			<TextButton aria-label='Expand record' icon='expand' onClick={() => {expandRecord(r);}} variant='dark'/>
+		</div>
+	);
+}
 initializeBlock(() => <Main />);
