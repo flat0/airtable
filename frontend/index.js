@@ -1,18 +1,21 @@
 // 2021-01-02
 // 1) https://airtable.com/developers/apps/guides/hello-world-tutorial
 // 2) https://airtable.com/developers/apps/guides/to-do-list-tutorial
-import {expandRecord, initializeBlock, TextButton, useBase, useRecords} from '@airtable/blocks/ui';
-import React from 'react';
+import {expandRecord, initializeBlock, TablePicker, TextButton, useBase, useRecords} from '@airtable/blocks/ui';
+// 2021-01-02 https://reactjs.org/docs/hooks-state.html
+import React, {useState} from 'react';
 function Main() {
 	// 2021-01-02 https://reactjs.org/docs/hooks-intro.html
 	const base = useBase();
-	const table = base.getTableByName('Tasks');
+	const [tableName, setTableName] = useState('Tasks');
+	const table = base.getTableByNameIfExists(tableName);
 	const records = useRecords(table);
-	const tasks = records.map(r => {return <Task key={r.id} r={r} />});
+	const tasks = !records ? null : records.map(r => {return <Task key={r.id} r={r} />});
 	return (
 		<div>
 			<div>{base.name} 2</div>
 			<div>Number of tasks: {records.length}</div>
+			<TablePicker onChange={t => {setTableName(t.name);}} table={table}/>
 			<div>{tasks}</div>
 		</div>
 	);
