@@ -1,7 +1,15 @@
 // 2021-01-02
 // 1) https://airtable.com/developers/apps/guides/hello-world-tutorial
 // 2) https://airtable.com/developers/apps/guides/to-do-list-tutorial
-import {expandRecord, initializeBlock, TablePicker, TextButton, useBase, useRecords} from '@airtable/blocks/ui';
+import {
+	expandRecord // 2021-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#expanding-records
+	,initializeBlock
+	,TablePicker // 2021-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#storing-the-selected-table-in-state
+	,TextButton // 2021-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#expanding-records
+	,useBase // 2021-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#part-1
+	,useGlobalConfig // 2021-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#storing-configuration
+	,useRecords // 2021-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#showing-the-number-of-records
+} from '@airtable/blocks/ui';
 // 2021-01-02 https://reactjs.org/docs/hooks-state.html
 import React, {useState} from 'react';
 function Main() {
