@@ -34,7 +34,9 @@ function Main() {
 	else {
 		completedField = !completedFieldId ? null : table.getFieldByIdIfExists(completedFieldId);
 		records = useRecords(table);
-		tasks = records.map(r => {return <Task key={r.id} r={r} completedFieldId={completedFieldId}/>});
+		// 2021-01-03 https://airtable.com/developers/apps/guides/to-do-list-tutorial#making-it-interactive
+		const toggle = (r) => {table.updateRecordAsync(r, {[completedFieldId]: !r.getCellValue(completedFieldId)});};
+		tasks = records.map(r => <Task completedFieldId={completedFieldId} key={r.id} onToggle={toggle} r={r}/>);
 	}
 	return (
 		<div>
@@ -54,7 +56,7 @@ https://airtable.com/developers/apps/guides/to-do-list-tutorial#permissions */}
 // 1) «Since we're rendering a list, we include a unique key for each element by using the record's ID»:
 // https://airtable.com/developers/apps/guides/to-do-list-tutorial#showing-the-name-of-the-records
 // 2) «Lists and Keys»: https://reactjs.org/docs/lists-and-keys.html
-function Task({r, completedFieldId}) {
+function Task({r, completedFieldId, onToggle}) {
 	const label = r.name || 'Unnamed record';
 	return (
 		<div
@@ -67,8 +69,11 @@ function Task({r, completedFieldId}) {
 				,padding: 12
 			}}
 		>
-			{/* 2020-01-03 https://airtable.com/developers/apps/guides/to-do-list-tutorial#tracking-completed-tasks */}
-			{!completedFieldId ? null : (r.getCellValue(completedFieldId) ? <s>{label}</s> : label)}
+			{/* 2020-01-03 https://airtable.com/developers/apps/guides/to-do-list-tutorial#making-it-interactive */}
+			<TextButton onClick={() => {onToggle(r);}} size='xlarge' variant='dark'>
+				{/* 2020-01-03 https://airtable.com/developers/apps/guides/to-do-list-tutorial#tracking-completed-tasks */}
+				{!completedFieldId ? null : (r.getCellValue(completedFieldId) ? <s>{label}</s> : label)}
+			</TextButton>
 			{/* 2020-01-02 https://airtable.com/developers/apps/guides/to-do-list-tutorial#expanding-records */}
 			<TextButton aria-label='Expand record' icon='expand' onClick={() => {expandRecord(r);}} variant='dark'/>
 		</div>
