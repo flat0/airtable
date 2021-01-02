@@ -21,8 +21,19 @@ function Main() {
 // 1) «Since we're rendering a list, we include a unique key for each element by using the record's ID»:
 // https://airtable.com/developers/apps/guides/to-do-list-tutorial#showing-the-name-of-the-records
 // 2) «Lists and Keys»: https://reactjs.org/docs/lists-and-keys.html
-function Task({r}) {return (<div>
-	{r.name || 'Unnamed record'}
-	<TextButton aria-label='Expand record' icon='expand' onClick={() => {expandRecord(r);}}/>
-</div>);}
+function Task({r}) {return (
+	<div
+		style={{
+			alignItems: 'center'
+			,borderBottom: '1px solid #ddd'
+			,display: 'flex'
+			,fontSize: 18
+			,justifyContent: 'space-between'
+			,padding: 12
+		}}
+	>
+		{r.name || 'Unnamed record'}
+		<TextButton aria-label='Expand record' icon='expand' onClick={() => {expandRecord(r);}} variant='dark'/>
+	</div>
+);}
 initializeBlock(() => <Main />);
