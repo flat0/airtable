@@ -7,15 +7,18 @@ import React, {useState} from 'react';
 function Main() {
 	// 2021-01-02 https://reactjs.org/docs/hooks-intro.html
 	const base = useBase();
-	const [tableName, setTableName] = useState('Tasks');
-	const table = base.getTableByNameIfExists(tableName);
+	// 2021-01-02
+	// 1) https://airtable.com/developers/apps/guides/to-do-list-tutorial#storing-the-selected-table-in-state
+	// 2) https://airtable.com/developers/apps/guides/to-do-list-tutorial#using-table-id-instead-of-table-name
+	const [tableId, setTableId] = useState(null);
+	const table = base.getTableByIdIfExists(tableId);
 	const records = useRecords(table);
 	const tasks = !records ? null : records.map(r => {return <Task key={r.id} r={r} />});
 	return (
 		<div>
 			<div>{base.name} 2</div>
-			<div>Number of tasks: {records.length}</div>
-			<TablePicker onChange={t => {setTableName(t.name);}} table={table}/>
+			<div>Number of tasks: {!records ? 0 : records.length}</div>
+			<TablePicker onChange={t => {setTableId(t.id);}} table={table}/>
 			<div>{tasks}</div>
 		</div>
 	);
